@@ -7,6 +7,7 @@
 //
 
 #import "XWViewController.h"
+#import "UIImage+XWFeatureExt.h"
 
 #define PROJ_DEMO_TABLE_CELL_TITLE_KEY @"demo_title"
 #define PROJ_DEMO_TABLE_CELL_BLOCK_KEY @"demo_block"
@@ -35,10 +36,80 @@ typedef void (^ProjDemoTableCellBlock)(void);
 - (NSArray *)tableViewDatas{
     if (!_tableViewDatas) {
         _tableViewDatas = @[
-                            //@{
-                            //    PROJ_DEMO_TABLE_CELL_TITLE_KEY:@"<#列表项标题#>",
-                            //    PROJ_DEMO_TABLE_CELL_BLOCK_KEY:<#^(void)列表点击事件#>,
-                            //},
+                            @{
+                                PROJ_DEMO_TABLE_CELL_TITLE_KEY:@"异步绘制红色方块图片",
+                                PROJ_DEMO_TABLE_CELL_BLOCK_KEY:^{
+                                    [UIImage xw_drawImageWithColor:UIColor.redColor size:CGSizeMake(50, 50) completion:^(UIImage * _Nonnull img) {
+                                        UIImageView *imageView = [[UIImageView alloc] initWithImage:img];
+                                        [self.view addSubview:imageView];
+                                        imageView.frame = CGRectMake(0, 0, 50, 50);
+                                        imageView.center = self.view.center;
+                                        
+                                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                            [imageView removeFromSuperview];
+                                        });
+                                    }];
+                                },
+                            },
+                            @{
+                                PROJ_DEMO_TABLE_CELL_TITLE_KEY:@"绘制红色方块图片",
+                                PROJ_DEMO_TABLE_CELL_BLOCK_KEY:^{
+                                    UIImage *image = [UIImage xw_imageWithColor:UIColor.redColor size:CGSizeMake(77, 77)];
+                                    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+                                    
+                                    [self.view addSubview:imageView];
+                                    imageView.frame = CGRectMake(0, 0, 50, 50);
+                                    imageView.center = self.view.center;
+                                    
+                                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                        
+                                        [imageView removeFromSuperview];
+                                    });
+                                },
+                                },
+                            @{
+                                PROJ_DEMO_TABLE_CELL_TITLE_KEY:@"绘制文字图片",
+                                PROJ_DEMO_TABLE_CELL_BLOCK_KEY:^{
+                                    UIImage *image =
+                                    [UIImage xw_imageWithString:@"Hello World"
+                                                     attributes:@{
+                                                                  NSFontAttributeName : [UIFont systemFontOfSize:20],
+                                                                  NSForegroundColorAttributeName : UIColor.whiteColor,
+                                                                }
+                                                backgroundColor:UIColor.greenColor];
+                                    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+                                    [self.view addSubview:imageView];
+//                                    imageView.frame = CGRectMake(0, 0, 100, 44);
+                                    imageView.center = self.view.center;
+                                    
+                                    
+                                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                        
+                                        [imageView removeFromSuperview];
+                                    });
+                                }
+                                },
+                                @{
+                                    PROJ_DEMO_TABLE_CELL_TITLE_KEY:@"异步绘制文字图片",
+                                    PROJ_DEMO_TABLE_CELL_BLOCK_KEY:^{
+                                        
+                                        [UIImage xw_drawImageWithString:@"Hello World"
+                                                             attributes:@{
+                                                                          NSFontAttributeName : [UIFont systemFontOfSize:40],
+                                                                          NSForegroundColorAttributeName : UIColor.whiteColor,
+                                                                          }
+                                                        backgroundColor:UIColor.blackColor
+                                                             completion:^(UIImage * _Nonnull img) {
+                                                                 UIImageView *imageView = [[UIImageView alloc] initWithImage:img];
+                                                                 [self.view addSubview:imageView];
+                                                                 imageView.center = self.view.center;
+                                                                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                                                     [imageView removeFromSuperview];
+                                                                 });
+                                                             }];
+                                   
+                                    }
+                                    }
                             ];
     }
     return _tableViewDatas;
