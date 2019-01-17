@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   # 版本号
   s.version          = '0.0.1'
   # 简介
-  s.summary          = 'A short description of XWFoundationExtension.'
+  s.summary          = '针对系统框架的扩展和修复'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -21,7 +21,8 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
   # 描述
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+    系统扩展库：XWFoundationExtension.
+    最低兼容iOS8版本
                        DESC
 
   # 主页
