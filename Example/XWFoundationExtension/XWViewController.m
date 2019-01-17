@@ -39,10 +39,9 @@ typedef void (^ProjDemoTableCellBlock)(void);
                             @{
                                 PROJ_DEMO_TABLE_CELL_TITLE_KEY:@"异步绘制红色方块图片",
                                 PROJ_DEMO_TABLE_CELL_BLOCK_KEY:^{
-                                    [UIImage xw_drawImageWithColor:UIColor.redColor size:CGSizeMake(50, 50) completion:^(UIImage * _Nonnull img) {
+                                    [UIImage xw_drawImageWithColor:UIColor.redColor size:CGSizeMake(80, 50) completion:^(UIImage * _Nonnull img) {
                                         UIImageView *imageView = [[UIImageView alloc] initWithImage:img];
                                         [self.view addSubview:imageView];
-                                        imageView.frame = CGRectMake(0, 0, 50, 50);
                                         imageView.center = self.view.center;
                                         
                                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -52,31 +51,33 @@ typedef void (^ProjDemoTableCellBlock)(void);
                                 },
                             },
                             @{
-                                PROJ_DEMO_TABLE_CELL_TITLE_KEY:@"绘制红色方块图片",
+                                PROJ_DEMO_TABLE_CELL_TITLE_KEY:@"异步绘制蓝色圆形图片",
                                 PROJ_DEMO_TABLE_CELL_BLOCK_KEY:^{
-                                    UIImage *image = [UIImage xw_imageWithColor:UIColor.redColor size:CGSizeMake(77, 77)];
-                                    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-                                    
-                                    [self.view addSubview:imageView];
-                                    imageView.frame = CGRectMake(0, 0, 50, 50);
-                                    imageView.center = self.view.center;
-                                    
-                                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                    [UIImage xw_drawCircleImageWithColor:UIColor.blueColor diam:100 completion:^(UIImage * _Nonnull img) {
+                                        UIImageView *imageView = [[UIImageView alloc] initWithImage:img];
                                         
-                                        [imageView removeFromSuperview];
-                                    });
+                                        [self.view addSubview:imageView];
+                                        imageView.center = self.view.center;
+                                        
+                                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                            
+                                            [imageView removeFromSuperview];
+                                        });
+                                    }];
+                                   
+                                    
                                 },
-                                },
+                            },
                             @{
                                 PROJ_DEMO_TABLE_CELL_TITLE_KEY:@"绘制文字图片",
                                 PROJ_DEMO_TABLE_CELL_BLOCK_KEY:^{
                                     UIImage *image =
                                     [UIImage xw_imageWithString:@"Hello World"
                                                      attributes:@{
-                                                                  NSFontAttributeName : [UIFont systemFontOfSize:20],
+                                                                  NSFontAttributeName : [UIFont systemFontOfSize:40],
                                                                   NSForegroundColorAttributeName : UIColor.whiteColor,
                                                                 }
-                                                backgroundColor:UIColor.greenColor];
+                                                backgroundColor:UIColor.blackColor];
                                     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
                                     [self.view addSubview:imageView];
 //                                    imageView.frame = CGRectMake(0, 0, 100, 44);
@@ -88,28 +89,37 @@ typedef void (^ProjDemoTableCellBlock)(void);
                                         [imageView removeFromSuperview];
                                     });
                                 }
+                            },
+                            @{
+                                PROJ_DEMO_TABLE_CELL_TITLE_KEY:@"裁剪图片圆角",
+                                PROJ_DEMO_TABLE_CELL_BLOCK_KEY:^{
+                                    
+                                    UIImage * image = [[UIImage imageNamed:@"source"] xw_clipBorderWithRoundedCorners:UIRectCornerTopLeft | UIRectCornerBottomRight radius:20];
+                                    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+                                    [self.view addSubview:imageView];
+                                    imageView.center = self.view.center;
+                                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                        [imageView removeFromSuperview];
+                                    });
+                                
+                                }
+                            },
+                            @{
+                                PROJ_DEMO_TABLE_CELL_TITLE_KEY:@"异步裁剪竖型圆形图片",
+                                PROJ_DEMO_TABLE_CELL_BLOCK_KEY:^{
+
+                                    [UIImage xw_clipCircleImage:[UIImage imageNamed:@"source3"]  completion:^(UIImage * _Nonnull img) {
+                                        UIImageView *imageView = [[UIImageView alloc] initWithImage:img];
+                                        [self.view addSubview:imageView];
+                                        imageView.center = self.view.center;
+                                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                            [imageView removeFromSuperview];
+                                        });
+                                    }];
+                                }
                                 },
-                                @{
-                                    PROJ_DEMO_TABLE_CELL_TITLE_KEY:@"异步绘制文字图片",
-                                    PROJ_DEMO_TABLE_CELL_BLOCK_KEY:^{
-                                        
-                                        [UIImage xw_drawImageWithString:@"Hello World"
-                                                             attributes:@{
-                                                                          NSFontAttributeName : [UIFont systemFontOfSize:40],
-                                                                          NSForegroundColorAttributeName : UIColor.whiteColor,
-                                                                          }
-                                                        backgroundColor:UIColor.blackColor
-                                                             completion:^(UIImage * _Nonnull img) {
-                                                                 UIImageView *imageView = [[UIImageView alloc] initWithImage:img];
-                                                                 [self.view addSubview:imageView];
-                                                                 imageView.center = self.view.center;
-                                                                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                                                     [imageView removeFromSuperview];
-                                                                 });
-                                                             }];
-                                   
-                                    }
-                                    }
+                            
+                            
                             ];
     }
     return _tableViewDatas;

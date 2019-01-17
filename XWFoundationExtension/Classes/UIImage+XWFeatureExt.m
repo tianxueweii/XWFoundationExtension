@@ -118,31 +118,56 @@ void XWProviderReleaseDataCallback (void *info, const void *data, size_t size){
     });
 }
 
++ (UIImage *)xw_circleImageWithColor:(UIColor *)color diam:(CGFloat)diam {
+    CGRect coverRect = CGRectMake(0.f, 0.f, diam, diam);
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(diam, diam), NO, [UIScreen mainScreen].scale);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:coverRect];
+    CGContextAddPath(context, [path CGPath]);
+    CGContextClip(context);
+    
+    CGContextSetFillColorWithColor(context, color.CGColor);
+    CGContextFillRect(context, coverRect);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    return image;
+}
+
++ (void)xw_drawCircleImageWithColor:(UIColor *)color diam:(CGFloat)diam completion:(void(^)(UIImage *img))comp {
+    if (!comp) return;
+    dispatch_async(xw_image_feature_draw_queue(), ^{
+        UIImage *img = [UIImage xw_circleImageWithColor:color diam:diam];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            comp(img);
+        });
+    });
+}
+
 #pragma mark -
 
 + (UIImage *)xw_imageWithString:(NSString *)str attributes:(NSDictionary<NSAttributedStringKey, id> *)attributes backgroundColor:(UIColor *)color {
     CGSize strSize = [str sizeWithAttributes:attributes];
-    //设置画布大小
+    // 设置画布大小
     CGRect coverRect = CGRectMake(0.f, 0.f, strSize.width, strSize.height);
     UIGraphicsBeginImageContextWithOptions(coverRect.size, NO, [UIScreen mainScreen].scale);
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    //填充颜色
+    // 填充颜色
     CGContextSetFillColorWithColor(context, color.CGColor);
     CGContextFillRect(context, CGRectMake(0.f, 0.f, coverRect.size.width, coverRect.size.height));
     
-    //绘制文字
+    // 绘制文字
     [str drawInRect:coverRect withAttributes:attributes];
     
-    //生产图片
+    // 生产图片
     UIImage *wordImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext ();
+    UIGraphicsEndImageContext();
     return wordImage;
 }
-/**
- 获取指定大小文字图片
- 
- */
+
 + (void)xw_drawImageWithString:(NSString *)str attributes:(NSDictionary<NSAttributedStringKey, id> *)attributes backgroundColor:(UIColor *)color completion:(void(^)(UIImage *img))comp {
     if (!comp) return;
     dispatch_async(xw_image_feature_draw_queue(), ^{
@@ -152,4 +177,72 @@ void XWProviderReleaseDataCallback (void *info, const void *data, size_t size){
         });
     });
 }
+
+#pragma mark -
+
+- (UIImage *)xw_clipCircleImage {
+    CGSize sourceSize = self.size;
+    CGFloat minSide = MIN(sourceSize.width, sourceSize.height);
+    // 设置画布大小
+    CGRect coverRect = CGRectMake(0.f, 0.f, minSide, minSide);
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(minSide, minSide), NO, [UIScreen mainScreen].scale);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    // 裁剪
+    UIBezierPath *rounded = [UIBezierPath bezierPathWithRoundedRect:coverRect byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(minSide / 2, minSide / 2)];
+    CGContextAddPath(context, [rounded CGPath]);
+    CGContextClip(context);
+    
+    // 绘制图片
+    if (sourceSize.width > sourceSize.height) {
+        [self drawAtPoint:CGPointMake(-(sourceSize.width - sourceSize.height) / 2, 0)];
+    } else {
+        [self drawAtPoint:CGPointMake(0, -(sourceSize.height - sourceSize.width) / 2)];
+    }
+    
+    UIImage *resultImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return resultImage;
+}
+
+- (UIImage *)xw_clipBorderWithRoundedCorners:(UIRectCorner)corners radius:(CGFloat)radii {
+    CGSize sourceSize = self.size;
+    // 设置画布大小
+    CGRect coverRect = CGRectMake(0.f, 0.f, sourceSize.width, sourceSize.height);
+    UIGraphicsBeginImageContextWithOptions(sourceSize, NO, [UIScreen mainScreen].scale);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    // 裁剪
+    UIBezierPath *rounded = [UIBezierPath bezierPathWithRoundedRect:coverRect byRoundingCorners:corners cornerRadii:CGSizeMake(radii, radii)];
+    CGContextAddPath(context, [rounded CGPath]);
+    CGContextClip(context);
+    
+    // 绘制图片
+    [self drawInRect:coverRect];
+    
+    UIImage *resultImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return resultImage;
+}
+
++ (void)xw_clipCircleImage:(UIImage *)sourceImage completion:(void(^)(UIImage *img))comp {
+    if (!comp) return;
+    dispatch_async(xw_image_feature_draw_queue(), ^{
+        UIImage *image = [sourceImage xw_clipCircleImage];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            comp(image);
+        });
+    });
+}
+
++ (void)xw_clipBorderWithImage:(UIImage *)sourceImage roundedCorners:(UIRectCorner)corners radius:(CGFloat)radii completion:(void(^)(UIImage *img))comp {
+    if (!comp) return;
+    dispatch_async(xw_image_feature_draw_queue(), ^{
+        UIImage *image = [sourceImage xw_clipBorderWithRoundedCorners:corners radius:radii];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            comp(image);
+        });
+    });
+}
+
 @end

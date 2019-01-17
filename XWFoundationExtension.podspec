@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   # 私有库名称
   s.name             = 'XWFoundationExtension'
   # 版本号
-  s.version          = '0.1.0'
+  s.version          = '0.0.1'
   # 简介
   s.summary          = 'A short description of XWFoundationExtension.'
 

@@ -16,7 +16,7 @@
  @param radii   需要设置的圆角半径
  */
 - (void)xw_addRoundedCorners:(UIRectCorner)corners
-                              radius:(CGFloat)radii {
+                      radius:(CGFloat)radii {
     
     UIBezierPath *rounded = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:corners cornerRadii:CGSizeMake(radii, radii)];
     CAShapeLayer *shape = [[CAShapeLayer alloc] init];

@@ -4,6 +4,8 @@
 //
 //  Created by tianxuewei on 2019/1/17.
 //
+//  本类所有图片异步绘制方法，均在主线程回调
+//
 
 #import <UIKit/UIKit.h>
 
@@ -23,9 +25,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (UIImage *)xw_qrImageForString:(NSString *)string imageSize:(CGFloat)imageSize red:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue;
 
-#pragma mark -
+
+#pragma mark - 绘图
 /**
- 获取颜色图片
+ 获取矩形图片
 
  @param color 颜色
  @param size 尺寸
@@ -33,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (UIImage *)xw_imageWithColor:(UIColor *)color size:(CGSize)size;
 /**
- 异步绘制
+ 异步绘制矩形
 
  @param color 颜色
  @param size 尺寸
@@ -41,72 +44,83 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (void)xw_drawImageWithColor:(UIColor *)color size:(CGSize)size completion:(void(^)(UIImage *img))comp;
 
-#pragma mark -
 /**
- 获取指定大小文字图片
+ 绘制圆形图片
+ 
+ @param color 颜色
+ @param diam 直径
+ 
+ @return 圆
+ */
++ (UIImage *)xw_circleImageWithColor:(UIColor *)color diam:(CGFloat)diam;
 
+/**
+ 异步绘制圆形图片
+
+ @param color 颜色
+ @param diam 直径
+ @param comp 完成块
+ */
++ (void)xw_drawCircleImageWithColor:(UIColor *)color diam:(CGFloat)diam completion:(void(^)(UIImage *img))comp;
+
+
+#pragma mark - 文字绘图
+/**
+ 获取指定文字图片
+ 
+ @param str 字符
+ @param attributes 富文本
+ @param color 颜色
  */
 + (UIImage *)xw_imageWithString:(NSString *)str attributes:(NSDictionary<NSAttributedStringKey, id> *)attributes backgroundColor:(UIColor *)color;
+
 /**
- 获取指定大小文字图片
- 
- @param str 文字
- @param clr 颜色
- @param font 字体
- @param size 大小
- @param comp 完成块
+ 异步绘制指定文字图片
+
+ @param str 字符
+ @param attributes 富文本
+ @param color 颜色
+ @param comp 完成快
  */
 + (void)xw_drawImageWithString:(NSString *)str attributes:(NSDictionary<NSAttributedStringKey, id> *)attributes backgroundColor:(UIColor *)color completion:(void(^)(UIImage *img))comp;
 
 
-#pragma mark -
-/**
- *  画一条虚线
- *
- *  @param size        大小
- *  @param color       颜色
- *  @param borderWidth 宽度
- *  @param type        类型
- *
- *  @return 虚线图片
- */
-//+ (UIImage*)xw_dottedLineWithSize:(CGSize)size borderColor:(UIColor *)color borderWidth:(CGFloat)borderWidth Type:(ZbcoreDottedLineType)type;
-/**
- 裁剪图片为圆形
- 
- @param sourceImage 原图片
- 
- */
-//+ (UIImage *)xw_circleImageWithImage:(UIImage *)sourceImage;
+#pragma mark - 裁剪
 
 /**
- 裁剪图片为圆形
- 
- @param sourceImage 原图片
- @param borderWidth 边框
- @param borderColor 边框颜色
- 
+ 裁剪为圆形图片
+
+ @return 返回新生成的UIImage对象
  */
-+ (UIImage *)xw_circleImageWithImage:(UIImage *)sourceImage borderWidth:(CGFloat)borderWidth borderColor:(UIColor *)borderColor;
-/**
- 绘制圆点
- 
- @param pointColor 圆点颜色
- @param pointSize  圆点大小
- 
- @return 圆点
- */
-+ (UIImage *)xw_circlePointImageWithColor: (UIColor *)pointColor size: (CGSize)pointSize;
+- (UIImage *)xw_clipCircleImage;
 
 /**
- 绘制圆点
- 
- @param pointColor 圆点颜色
- @param pointSize  圆点大小
- 
- @return 圆点
+ 裁剪图片圆角
+
+ @param corners 选择圆角
+ @param radii 圆角半径
+ @return 返回新生成的UIImage对象
  */
-+ (UIView *)xw_circlePointViewWithColor: (UIColor *)pointColor size: (CGSize)pointSize;
+- (UIImage *)xw_clipBorderWithRoundedCorners:(UIRectCorner)corners radius:(CGFloat)radii;
+
+/**
+ 异步绘制圆形图片
+
+ @param sourceImage 原图片
+ @param comp 完成块
+ */
++ (void)xw_clipCircleImage:(UIImage *)sourceImage completion:(void(^)(UIImage *img))comp;
+
+/**
+ 异步绘制圆角图片
+
+ @param sourceImage 原图片
+ @param corners 选择圆角
+ @param radii 圆角半径
+ @param comp 完成块
+ */
++ (void)xw_clipBorderWithImage:(UIImage *)sourceImage roundedCorners:(UIRectCorner)corners radius:(CGFloat)radii completion:(void(^)(UIImage *img))comp;
+
 
 @end
 
