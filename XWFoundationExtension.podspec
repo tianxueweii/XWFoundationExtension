@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   # 私有库名称
   s.name             = 'XWFoundationExtension'
   # 版本号
-  s.version          = '0.0.2'
+  s.version          = '0.0.3'
   # 简介
   s.summary          = '针对系统框架的扩展和修复'
 

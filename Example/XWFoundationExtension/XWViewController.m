@@ -16,9 +16,10 @@ typedef void (^ProjDemoTableCellBlock)(void);
 
 @interface XWViewController ()<UITableViewDelegate, UITableViewDataSource>
 /** 列表 */
-@property(nonatomic, strong)UITableView *tableView;
+@property (nonatomic, strong) UITableView *tableView;
 /** 列表数据 */
-@property(nonatomic, strong)NSArray *tableViewDatas;
+@property (nonatomic, strong) NSArray *tableViewDatas;
+@property (nonatomic, strong) UIView *headView;
 @end
 
 @implementation XWViewController
@@ -28,12 +29,16 @@ typedef void (^ProjDemoTableCellBlock)(void);
     
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
+    self.tableView.tableHeaderView = self.headView;
     
     NSLog(@"%d", _isiPhoneXSeries);
     
     NSLog(@"%@", _sandboxPathTemp);
     NSLog(@"%@", _sandboxPathCache);
     NSLog(@"%@", _sandboxPathDocument);
+    
+    NSLogStackSymbols;
+    
 }
 
 /**
@@ -140,6 +145,33 @@ typedef void (^ProjDemoTableCellBlock)(void);
         [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
     }
     return _tableView;
+}
+
+- (UIView *)headView {
+    if (!_headView) {
+        _headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _screenWidth, 100)];
+        _headView.backgroundColor = UIColor.whiteColor;
+        
+        UIButton *testBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+        [testBtn setImage:[UIImage xw_imageWithColor:UIColor.redColor size:CGSizeMake(50, 50)] forState:UIControlStateNormal];
+        [testBtn setImage:[UIImage xw_imageWithColor:[UIColor.redColor colorWithAlphaComponent:0.6] size:CGSizeMake(50, 50)] forState:UIControlStateHighlighted];
+        
+        [testBtn setTouchUpInsideBlock:^(UIButton * _Nonnull __weak button) {
+            NSLog(@"touch up inside");
+        }];
+        
+        testBtn.touchDownBlock = ^(UIButton * _Nonnull __weak button) {
+            NSLog(@"touch down");
+        };
+        
+        testBtn.touchDownRepeatBlock = ^(UIButton * _Nonnull __weak button) {
+            NSLog(@"touch down repeat");
+        };
+        
+        [_headView addSubview:testBtn];
+        testBtn.center = _headView.center;
+    }
+    return _headView;
 }
 
 #pragma mark - TableView Delegate

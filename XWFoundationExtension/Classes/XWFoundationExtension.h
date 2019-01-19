@@ -91,7 +91,7 @@
 /**
  输出堆栈
  */
-#define NSLogStackSymbols NSLog(@"－－－%@",[NSThread callStackSymbols]);
+#define NSLogStackSymbols NSLog(@"\nStackSymbols%@",[NSThread callStackSymbols]);
 
 #pragma mark -
 
