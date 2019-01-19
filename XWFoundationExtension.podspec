@@ -10,15 +10,10 @@ Pod::Spec.new do |s|
   # 私有库名称
   s.name             = 'XWFoundationExtension'
   # 版本号
-  s.version          = '0.0.1'
+  s.version          = '0.0.2'
   # 简介
   s.summary          = '针对系统框架的扩展和修复'
 
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
   # 描述
   s.description      = <<-DESC
     系统扩展库：XWFoundationExtension.

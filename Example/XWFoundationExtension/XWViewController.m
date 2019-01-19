@@ -7,7 +7,7 @@
 //
 
 #import "XWViewController.h"
-#import "UIImage+XWFeatureExt.h"
+#import <XWFoundationExtension/XWFoundationExtension.h>
 
 #define PROJ_DEMO_TABLE_CELL_TITLE_KEY @"demo_title"
 #define PROJ_DEMO_TABLE_CELL_BLOCK_KEY @"demo_block"
@@ -28,6 +28,12 @@ typedef void (^ProjDemoTableCellBlock)(void);
     
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
+    
+    NSLog(@"%d", _isiPhoneXSeries);
+    
+    NSLog(@"%@", _sandboxPathTemp);
+    NSLog(@"%@", _sandboxPathCache);
+    NSLog(@"%@", _sandboxPathDocument);
 }
 
 /**
