@@ -12,13 +12,13 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UIView (XWFeatureExt)
 
 /**
- 设置部分圆角(绝对布局)
+ 设置UIView部分圆角(frame布局)
  
  @param corners 需要设置为圆角的角 UIRectCornerTopLeft | UIRectCornerTopRight | UIRectCornerBottomLeft | UIRectCornerBottomRight | UIRectCornerAllCorners
  @param radii   需要设置的圆角半径
  */
 - (void)xw_addRoundedCorners:(UIRectCorner)corners
-                              radius:(CGFloat)radii;
+                      radius:(CGFloat)radii;
 
 /**
  从视图树中返回指定类型实例子视图数组，如果子视图没有指定的类型，则返回空数组

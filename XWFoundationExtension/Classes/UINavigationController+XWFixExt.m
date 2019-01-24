@@ -26,7 +26,6 @@
 }
 
 
-
 #pragma mark - UIGestureRecognizerDelegate
 
 /**
@@ -35,6 +34,24 @@
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer;{
     return self.viewControllers.count > 1;
 }
+
+#pragma mark - StatusBar
+
+/**
+ 无法保证在同一导航栏控制器下，导航栏样式和状态栏样式相同，具体交给控制器渲染
+ */
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return [self.topViewController preferredStatusBarStyle];
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return [self.topViewController prefersStatusBarHidden];
+}
+
+- (UIStatusBarAnimation)preferredStatusBarUpdateAnimation {
+    return [self.topViewController preferredStatusBarUpdateAnimation];
+}
+
 
 #pragma mark - Autorotate
 

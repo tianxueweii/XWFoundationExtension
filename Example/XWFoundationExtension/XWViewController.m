@@ -38,7 +38,6 @@ typedef void (^ProjDemoTableCellBlock)(void);
     NSLog(@"%@", _sandboxPathDocument);
     
     NSLogStackSymbols;
-    
 }
 
 /**

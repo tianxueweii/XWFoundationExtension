@@ -11,6 +11,7 @@
 #import "NSObject+XWFeatureExt.h"
 #import "NSString+XWFeatureExt.h"
 #import "UIButton+XWFixExt.h"
+#import "UIButton+XWFeatureExt.h"
 #import "UIColor+XWFeatureExt.h"
 #import "UIImage+XWFeatureExt.h"
 #import "UINavigationController+XWFixExt.h"
